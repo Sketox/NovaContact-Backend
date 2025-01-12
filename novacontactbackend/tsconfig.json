@@ -10,6 +10,9 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+      "*": ["src/*"] // Para que reconozca rutas relativas dentro de "src"
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -17,5 +20,7 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "include": ["src/**/*"], // Asegúrate de incluir todos los archivos dentro de "src"
+  "exclude": ["node_modules", "dist"] // Excluir "node_modules" y la carpeta de salida
 }

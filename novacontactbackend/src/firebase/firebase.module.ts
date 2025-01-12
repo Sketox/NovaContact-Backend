@@ -1,17 +1,17 @@
-import { Module, Global } from '@nestjs/common';
-import admin from '../firebase.config';
+import { Module } from '@nestjs/common';
+import * as admin from 'firebase-admin';
 
-// Define el token FIREBASE_ADMIN como una constante
 export const FIREBASE_ADMIN = 'FIREBASE_ADMIN';
 
-@Global()
 @Module({
   providers: [
     {
-      provide: FIREBASE_ADMIN, // Usa el token aquí
-      useValue: admin, // Proporciona la instancia de Firebase Admin
+      provide: FIREBASE_ADMIN,
+      useValue: admin.initializeApp({
+        credential: admin.credential.applicationDefault(),
+      }),
     },
   ],
-  exports: [FIREBASE_ADMIN], // Exporta el token para que otros módulos lo usen
+  exports: [FIREBASE_ADMIN], // Exporta el token para que pueda ser inyectado
 })
 export class FirebaseModule {}
