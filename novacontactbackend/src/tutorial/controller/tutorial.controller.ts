@@ -7,6 +7,6 @@ export class TutorialController {
     constructor(private readonly tutorialService: TutorialService){}
     @Post('createData')
     async createData(@Body() data: any): Promise <void>{
-        await this.tutorialService.createData(data);       
+        await this.tutorialService.createData(data);
     }
 }

@@ -4,6 +4,9 @@ import { Injectable, Inject } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
+  getHello(): string {
+    throw new Error('Method not implemented.');
+  }
  
 
   // async getHello(): Promise<string> {
