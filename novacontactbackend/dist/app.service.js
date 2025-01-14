@@ -10,8 +10,7 @@ exports.AppService = void 0;
 const common_1 = require("@nestjs/common");
 let AppService = class AppService {
     getHello() {
-        console.log('Entró al servicio AppService');
-        return '¡Hola desde AppService!';
+        throw new Error('Method not implemented.');
     }
 };
 exports.AppService = AppService;

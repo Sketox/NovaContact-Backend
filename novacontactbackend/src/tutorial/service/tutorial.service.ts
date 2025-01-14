@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import{push,ref, set } from 'firebase/database';
+import{DataSnapshot, push, get , ref, set } from 'firebase/database';
 import { firebaseDataBase } from '../../firebase.config';
 
 @Injectable()
@@ -9,5 +9,11 @@ export class TutorialService {
         const newElementRef= push(dataRef, {dataRef: data});
         await set(newElementRef, data);
         console.log('se creo exitosamente');
+    }
+    async getData(): Promise<any>{
+        const dataRef= ref(firebaseDataBase, 'Data');
+        const snapshot: DataSnapshot = await get(dataRef);
+        console.log("Data recibida Exitosamente");
+        return snapshot.val();
     }
 }

@@ -17,7 +17,6 @@ let AppController = class AppController {
         this.appService = appService;
     }
     getHello() {
-        console.log('Entró al controlador AppController');
         return this.appService.getHello();
     }
 };
