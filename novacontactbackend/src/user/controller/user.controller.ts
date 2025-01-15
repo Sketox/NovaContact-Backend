@@ -31,6 +31,7 @@ export class UserController {
     @Post('authenticate')
     async authenticateUser(@Body() credentials: { email: string; password: string }): Promise<any> {
         const { email, password } = credentials;
-        return this.userService.findUserByEmailAndPassword(email, password);
+        const result = await this.userService.findUserByEmailAndPassword(email, password);
+        return result; // Retorna { userId, user }
     }
 }
