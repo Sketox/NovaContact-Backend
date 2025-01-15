@@ -57,8 +57,8 @@ export class UserService {
                 const isPasswordValid = bcrypt.compareSync(password, user.password);
 
                 if (isPasswordValid) {
-                    console.log('Usuario autenticado:', user);
-                    return user;
+                    console.log('Usuario autenticado:', user, userId);
+                    return {user, userId} ;
                 } else {
                     throw new Error('Contraseña incorrecta');
                 }
