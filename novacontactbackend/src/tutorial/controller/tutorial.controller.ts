@@ -24,12 +24,18 @@ export class TutorialController {
     }
 
     /**
-     * Endpoint para obtener datos de contacto por ID de usuario.
-     * @param userId ID del usuario.
-     * @returns Datos del contacto asociado.
-     */
+ * Endpoint para obtener datos de contacto por ID de usuario.
+ * @param userId ID del usuario.
+ * @returns Datos del contacto asociado.
+ */
     @Get('getContact/:userId')
     async getContactByUserId(@Param('userId') userId: string): Promise<any> {
-        return this.tutorialService.getContactByUserId(userId);
+        const contacts = await this.tutorialService.getContactByUserId(userId);
+    
+        if (!contacts) {
+            return { message: `No se encontraron datos para el usuario con ID: ${userId}` };
+        }
+    
+        return contacts;
     }
 }

@@ -35,13 +35,19 @@ export class TutorialService {
         const dataRef = ref(firebaseDataBase, 'Data');
         const userQuery = query(dataRef, orderByChild('userId'), equalTo(userId));
         const snapshot: DataSnapshot = await get(userQuery);
-
+    
         if (!snapshot.exists()) {
             console.log(`No se encontraron datos para el usuario con ID: ${userId}`);
             return null;
         }
-
+    
+        const results: any[] = [];
+        snapshot.forEach((childSnapshot) => {
+            results.push({ id: childSnapshot.key, ...childSnapshot.val() });
+        });
+    
         console.log(`Datos recibidos exitosamente para el usuario con ID: ${userId}`);
-        return snapshot.val();
+        return results;
     }
+    
 }
