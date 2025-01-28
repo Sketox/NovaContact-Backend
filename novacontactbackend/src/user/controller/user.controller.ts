@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body } from '@nestjs/common';
+import { Controller, Post, Get, Body, Delete,Put, Param } from '@nestjs/common';
 import { UserService } from 'user/service/user.service';
 
 @Controller('user')
@@ -34,4 +34,27 @@ export class UserController {
         const result = await this.userService.findUserByEmailAndPassword(email, password);
         return result; // Retorna { userId, user }
     }
+    
+    /**
+     * Endpoint para eliminar un contacto.
+     * @param contactId ID del contacto a eliminar.
+     */
+    @Delete('deleteContact/:contactId')
+    async deleteContact(@Param('contactId') contactId: string): Promise<void> {
+        await this.userService.deleteContact(contactId);
+    }
+
+    /**
+     * Endpoint para editar un contacto.
+     * @param contactId ID del contacto a editar.
+     * @param contactData Datos actualizados del contacto.
+     */
+    @Put('editContact/:contactId')
+    async editContact(
+        @Param('contactId') contactId: string,
+        @Body() contactData: any
+    ): Promise<void> {
+        await this.userService.editContact(contactId, contactData);
+    }
 }
+
