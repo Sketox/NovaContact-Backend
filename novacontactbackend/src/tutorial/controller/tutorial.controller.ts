@@ -24,18 +24,26 @@ export class TutorialController {
     }
 
     /**
- * Endpoint para obtener datos de contacto por ID de usuario.
- * @param userId ID del usuario.
- * @returns Datos del contacto asociado.
- */
-    @Get('getContact/:userId')
+   * Endpoint para obtener datos de contacto por ID de usuario.
+   * @param userId ID del usuario.
+   * @returns Datos del contacto asociado.
+   */
+    @Get('getContact/:userId') // Ruta dinámica para obtener contactos por userId
     async getContactByUserId(@Param('userId') userId: string): Promise<any> {
+      try {
+        // Llamamos al servicio para obtener los contactos
         const contacts = await this.tutorialService.getContactByUserId(userId);
-    
+  
+        // Si no se encuentran contactos, retornamos un mensaje con 404 (No encontrado)
         if (!contacts) {
-            return { message: `No se encontraron datos para el usuario con ID: ${userId}` };
+          return { message: `No se encontraron datos para el usuario con ID: ${userId}` };
         }
-    
+  
+        // Si se encuentran contactos, los devolvemos
         return contacts;
+      } catch (error) {
+        // En caso de error, retornamos un mensaje de error
+        return { message: 'Error al obtener los datos', error: error.message };
+      }
     }
-}
+  }

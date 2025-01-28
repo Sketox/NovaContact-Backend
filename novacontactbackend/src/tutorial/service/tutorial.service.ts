@@ -24,30 +24,42 @@ export class TutorialService {
         const snapshot: DataSnapshot = await get(dataRef);
         console.log("Datos recibidos exitosamente");
         return snapshot.val();
+        
     }
 
     /**
-     * Obtiene los datos de un contacto por el ID de usuario.
-     * @param userId ID del usuario.
-     * @returns Datos del contacto asociado al usuario.
-     */
-    async getContactByUserId(userId: string): Promise<any> {
-        const dataRef = ref(firebaseDataBase, 'Data');
-        const userQuery = query(dataRef, orderByChild('userId'), equalTo(userId));
-        const snapshot: DataSnapshot = await get(userQuery);
-    
-        if (!snapshot.exists()) {
-            console.log(`No se encontraron datos para el usuario con ID: ${userId}`);
-            return null;
-        }
-    
-        const results: any[] = [];
-        snapshot.forEach((childSnapshot) => {
-            results.push({ id: childSnapshot.key, ...childSnapshot.val() });
-        });
-    
-        console.log(`Datos recibidos exitosamente para el usuario con ID: ${userId}`);
-        return results;
+   * Obtiene los datos de un contacto por el ID de usuario.
+   * @param userId ID del usuario.
+   * @returns Datos del contacto asociado al usuario.
+   */
+  async getContactByUserId(userId: string): Promise<any> {
+    try {
+      const dataRef = ref(firebaseDataBase, 'Data');
+      const userQuery = query(dataRef, orderByChild('userId'), equalTo(userId));
+
+      // Ejecutar la consulta
+      const snapshot = await get(userQuery);
+
+      // Verificar si existen resultados
+      if (!snapshot.exists()) {
+        console.log(`No se encontraron datos para el usuario con ID: ${userId}`);
+        return null;
+      }
+
+      // Procesar resultados
+      const results: any[] = [];
+      snapshot.forEach((childSnapshot) => {
+        results.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+
+      console.log(`Datos encontrados para el usuario con ID: ${userId}`);
+      console.log(results)
+      return results;
+      
+    } catch (error) {
+      console.error('Error al obtener los contactos:', error);
+      throw new Error('No se pudieron recuperar los contactos.');
     }
+  }
     
 }
