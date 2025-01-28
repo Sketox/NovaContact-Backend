@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSnapshot, push, get, ref, set, query, orderByChild, equalTo } from 'firebase/database';
+import { DataSnapshot, push, get, ref, set, query, orderByChild, equalTo, update, remove } from 'firebase/database';
 import { firebaseDataBase } from '../../firebase.config';
 
 @Injectable()
@@ -61,5 +61,18 @@ export class TutorialService {
       throw new Error('No se pudieron recuperar los contactos.');
     }
   }
+   // Editar un contacto
+   async editContact(contactId: string, contactData: any): Promise<void> {
+    const contactRef = ref(firebaseDataBase, `Data/${contactId}`);
+    await update(contactRef, contactData);
+    console.log(`Contacto ${contactId} editado exitosamente`);
+}
+
+// Eliminar un contacto
+async deleteContact(contactId: string): Promise<void> {
+    const contactRef = ref(firebaseDataBase, `Data/${contactId}`);
+    await remove(contactRef);
+    console.log(`Contacto ${contactId} eliminado exitosamente`);
+}
     
 }

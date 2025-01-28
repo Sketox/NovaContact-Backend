@@ -71,37 +71,5 @@ export class UserService {
         }
     }
     
-    /**
-     * Eliminar un contacto.
-     * @param contactId ID del contacto a eliminar.
-     */
-    async deleteContact(contactId: string): Promise<void> {
-        const contactRef = ref(firebaseDataBase, `Data/${contactId}`);
-
-        try {
-            await set(contactRef, null); // Eliminar el contacto
-            console.log(`Contacto ${contactId} eliminado exitosamente`);
-        } catch (error) {
-            console.error('Error al eliminar contacto:', error.message);
-            throw new Error('No se pudo eliminar el contacto');
-        }
-    }
-
-    /**
-     * Editar un contacto.
-     * @param contactId ID del contacto a editar.
-     * @param contactData Datos actualizados del contacto.
-     */
-    async editContact(contactId: string, contactData: any): Promise<void> {
-        const contactRef = ref(firebaseDataBase, `Data/${contactId}`);
-
-        try {
-            await update(contactRef, contactData); // Actualizar los datos del contacto
-            console.log(`Contacto ${contactId} actualizado exitosamente`);
-        } catch (error) {
-            console.error('Error al editar contacto:', error.message);
-            throw new Error('No se pudo editar el contacto');
-        }
-    }
 }
 
