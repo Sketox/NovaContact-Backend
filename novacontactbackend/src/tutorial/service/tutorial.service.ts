@@ -61,18 +61,40 @@ export class TutorialService {
       throw new Error('No se pudieron recuperar los contactos.');
     }
   }
+   /**
+     * Obtiene los datos de un contacto por su contactId.
+     * @param contactId ID del contacto.
+     * @returns Datos del contacto asociado.
+     */
+   async getContactById(contactId: string): Promise<any> {
+    try {
+        const contactRef = ref(firebaseDataBase, `Data/${contactId}`);
+        const snapshot = await get(contactRef);
+
+        // Verificar si existe el contacto
+        if (!snapshot.exists()) {
+            console.log(`No se encontró el contacto con ID: ${contactId}`);
+            return null;
+        }
+
+        console.log(`Contacto encontrado con ID: ${contactId}`);
+        return { id: contactId, ...snapshot.val() };
+    } catch (error) {
+        console.error('Error al obtener el contacto:', error);
+        throw new Error('No se pudo recuperar el contacto.');
+    }
+}
    // Editar un contacto
-   async editContact(contactId: string, contactData: any): Promise<void> {
+  async editContact(contactId: string, contactData: any): Promise<void> {
     const contactRef = ref(firebaseDataBase, `Data/${contactId}`);
     await update(contactRef, contactData);
     console.log(`Contacto ${contactId} editado exitosamente`);
-}
-
+  }
 // Eliminar un contacto
-async deleteContact(contactId: string): Promise<void> {
+  async deleteContact(contactId: string): Promise<void> {
     const contactRef = ref(firebaseDataBase, `Data/${contactId}`);
     await remove(contactRef);
     console.log(`Contacto ${contactId} eliminado exitosamente`);
-}
+  }
     
 }
