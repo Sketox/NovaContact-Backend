@@ -5,11 +5,11 @@ const app_module_1 = require("./app.module");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors({
-        origin: ['http://localhost:3000', 'https://aa1b-190-155-72-128.ngrok-free.app'],
-        methods: 'GET,POST,PUT,DELETE',
-        allowedHeaders: 'Content-Type, Authorization',
+        origin: 'http://localhost:3001',
+        methods: 'GET,POST,PUT,DELETE,PATCH,HEAD',
+        credentials: true
     });
-    await app.listen(process.env.PORT ?? 3000);
+    await app.listen(3000);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

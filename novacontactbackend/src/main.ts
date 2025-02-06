@@ -6,11 +6,11 @@ async function bootstrap() {
   
   // Configura CORS si es necesario
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://aa1b-190-155-72-128.ngrok-free.app'],
-    methods: 'GET,POST,PUT,DELETE',
-    allowedHeaders: 'Content-Type, Authorization',
+    origin: 'http://localhost:3001',
+    methods: 'GET,POST,PUT,DELETE,PATCH,HEAD',
+    credentials: true
   });
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(3000);
 }
 bootstrap();

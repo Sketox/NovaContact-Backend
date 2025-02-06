@@ -32,35 +32,36 @@ export class TutorialService {
    * @param userId ID del usuario.
    * @returns Datos del contacto asociado al usuario.
    */
-  async getContactByUserId(userId: string): Promise<any> {
-    try {
-      const dataRef = ref(firebaseDataBase, 'Data');
-      const userQuery = query(dataRef, orderByChild('userId'), equalTo(userId));
-
-      // Ejecutar la consulta
-      const snapshot = await get(userQuery);
-
-      // Verificar si existen resultados
-      if (!snapshot.exists()) {
-        console.log(`No se encontraron datos para el usuario con ID: ${userId}`);
-        return null;
+    async getContactByUserId(userId: string): Promise<any[]> {
+      try {
+          const dataRef = ref(firebaseDataBase, 'Data');
+          const userQuery = query(dataRef, orderByChild('userId'), equalTo(userId));
+  
+          // Ejecutar la consulta
+          const snapshot = await get(userQuery);
+  
+          // Verificar si existen resultados
+          if (!snapshot.exists()) {
+              console.log(`No se encontraron datos para el usuario con ID: ${userId}`);
+              return [];
+          }
+  
+          // Convertir snapshot en array
+          const results: any[] = [];
+          snapshot.forEach((childSnapshot) => {
+              results.push({ id: childSnapshot.key, ...childSnapshot.val() });
+          });
+  
+          console.log(`Datos encontrados para el usuario con ID: ${userId}`);
+  
+          // Aplicar QuickSort para ordenar alfabéticamente por 'name'
+          return quickSort(results);
+      } catch (error) {
+          console.error('Error al obtener los contactos:', error);
+          throw new Error('No se pudieron recuperar los contactos.');
       }
-
-      // Procesar resultados
-      const results: any[] = [];
-      snapshot.forEach((childSnapshot) => {
-        results.push({ id: childSnapshot.key, ...childSnapshot.val() });
-      });
-
-      console.log(`Datos encontrados para el usuario con ID: ${userId}`);
-      console.log(results)
-      return results;
-      
-    } catch (error) {
-      console.error('Error al obtener los contactos:', error);
-      throw new Error('No se pudieron recuperar los contactos.');
-    }
   }
+  
    /**
      * Obtiene los datos de un contacto por su contactId.
      * @param contactId ID del contacto.
@@ -96,5 +97,22 @@ export class TutorialService {
     await remove(contactRef);
     console.log(`Contacto ${contactId} eliminado exitosamente`);
   }
-    
 }
+function quickSort(arr: any[]): any[] {
+  if (arr.length <= 1) return arr;
+
+  const pivot = arr[arr.length - 1]; // Último elemento como pivote
+  const left = [];
+  const right = [];
+
+  for (let i = 0; i < arr.length - 1; i++) {
+      if (arr[i].name.localeCompare(pivot.name) < 0) {
+          left.push(arr[i]); // Menor al pivote
+      } else {
+          right.push(arr[i]); // Mayor o igual al pivote
+      }
+  }
+
+  return [...quickSort(left), pivot, ...quickSort(right)];
+}
+
