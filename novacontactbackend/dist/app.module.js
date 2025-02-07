@@ -12,14 +12,17 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const tutorial_module_1 = require("./tutorial/tutorial.module");
 const user_module_1 = require("./user/user.module");
+const room_service_1 = require("./room/service/room.service");
+const room_module_1 = require("./room/room.module");
+const upload_module_1 = require("./upload/upload.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
-        imports: [tutorial_module_1.TutorialModule, user_module_1.UserModule],
+        providers: [app_service_1.AppService, room_service_1.RoomService],
+        imports: [tutorial_module_1.TutorialModule, user_module_1.UserModule, room_module_1.RoomModule, upload_module_1.UploadModule],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
