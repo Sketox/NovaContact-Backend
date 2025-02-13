@@ -1,5 +1,8 @@
-import { Body, Controller, Post, Get, Param, Delete, Put } from '@nestjs/common';
+import { Body, Controller, Post, Get, Param, Delete, Put, UploadedFile, UseInterceptors} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { TutorialService } from '../service/tutorial.service';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('tutorial')
 export class TutorialController {
@@ -13,6 +16,27 @@ export class TutorialController {
     async createData(@Body() data: any): Promise<void> {
         await this.tutorialService.createData(data);
     }
+      /**
+     * Endpoint para subir una imagen.
+     * @param file Archivo de imagen recibido.
+     */
+      @Post('uploadImage')
+      @UseInterceptors(FileInterceptor('image', {
+          storage: diskStorage({
+              destination: './uploads', // Directorio donde se guardarán las imágenes
+              filename: (req, file, callback) => {
+                  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+                  const ext = extname(file.originalname);
+                  callback(null, `image-${uniqueSuffix}${ext}`);
+              }
+          })
+      }))
+      async uploadImage(@UploadedFile() file: Express.Multer.File) {
+          return {
+              message: 'Imagen subida exitosamente',
+              filePath: `/uploads/${file.filename}`
+          };
+      }
 
     /**
      * Endpoint para obtener todos los datos.
@@ -91,6 +115,21 @@ export class TutorialController {
             return { message: 'Contacto eliminado exitosamente' };
         } catch (error) {
             return { message: 'Error al eliminar el contacto', error: error.message };
+        }
+    }
+    // Endpoint para buscar un contacto por nombre
+    @Get('searchContact/:name')
+    async searchContact(@Param('name') name: string): Promise<any> {
+        try {
+            const contact = await this.tutorialService.searchContactByName(name);
+
+            if (!contact) {
+                return { message: `No se encontró ningún contacto con el nombre: ${name}` };
+            }
+
+            return contact;
+        } catch (error) {
+            return { message: 'Error al buscar el contacto', error: error.message };
         }
     }
 }

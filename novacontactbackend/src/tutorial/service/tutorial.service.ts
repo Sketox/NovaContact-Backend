@@ -26,6 +26,13 @@ export class TutorialService {
         return snapshot.val();
         
     }
+    async saveImageData(imageUrl: string): Promise<void> {
+        const dataRef = ref(firebaseDataBase, 'Images');
+        const newElementRef = push(dataRef);
+        await set(newElementRef, { url: imageUrl, uploadedAt: new Date().toISOString() });
+
+        console.log('Imagen guardada en Firebase');
+    }
 
     /**
    * Obtiene los datos de un contacto por el ID de usuario.
@@ -97,7 +104,72 @@ export class TutorialService {
     await remove(contactRef);
     console.log(`Contacto ${contactId} eliminado exitosamente`);
   }
+  /**
+ * Busca un contacto por nombre usando búsqueda binaria recursiva.
+ * @param name Nombre del contacto a buscar.
+ * @returns Contacto encontrado o null si no existe.
+ */
+async searchContactByName(name: string): Promise<any | null> {
+    try {
+        // 1. Obtener todos los contactos de Firebase
+        const dataRef = ref(firebaseDataBase, 'Data');
+        const snapshot = await get(dataRef);
+
+        // 2. Si la base de datos está vacía, no hay contactos para buscar
+        if (!snapshot.exists()) {
+            console.log("No hay contactos en la base de datos.");
+            return null;
+        }
+
+        // 3. Convertimos los datos obtenidos en un array de objetos
+        const contacts: any[] = [];
+        snapshot.forEach((childSnapshot) => {
+            contacts.push({ id: childSnapshot.key, ...childSnapshot.val() });
+        });
+
+        // 4. Ordenamos los contactos alfabéticamente por el atributo 'name'
+        const sortedContacts = quickSort(contacts);
+
+        // 5. Aplicamos búsqueda binaria recursiva para encontrar el contacto
+        return binarySearchRecursive(sortedContacts, name, 0, sortedContacts.length - 1);
+    } catch (error) {
+        console.error('Error al buscar el contacto:', error);
+        throw new Error('No se pudo realizar la búsqueda del contacto.');
+    }
 }
+
+}
+/**
+ * Algoritmo de búsqueda binaria recursiva.
+ * @param arr Lista ordenada de contactos.
+ * @param target Nombre a buscar.
+ * @param left Índice izquierdo.
+ * @param right Índice derecho.
+ * @returns Contacto encontrado o null.
+ */
+function binarySearchRecursive(arr: any[], target: string, left: number, right: number): any | null {
+    // 1. Caso base: Si los límites se cruzan, el elemento no está en la lista
+    if (left > right) return null;
+
+    // 2. Calculamos el índice medio
+    const mid = Math.floor((left + right) / 2);
+
+    // 3. Comparamos el nombre del elemento medio con el objetivo
+    const comparison = arr[mid].name.localeCompare(target);
+
+    if (comparison === 0) {
+        // 4. Si son iguales, hemos encontrado el contacto y lo retornamos
+        return arr[mid];
+    } else if (comparison > 0) {
+        // 5. Si el nombre medio es mayor al objetivo, buscamos en la mitad izquierda
+        return binarySearchRecursive(arr, target, left, mid - 1);
+    } else {
+        // 6. Si el nombre medio es menor al objetivo, buscamos en la mitad derecha
+        return binarySearchRecursive(arr, target, mid + 1, right);
+    }
+}
+
+
 function quickSort(arr: any[]): any[] {
   if (arr.length <= 1) return arr;
 

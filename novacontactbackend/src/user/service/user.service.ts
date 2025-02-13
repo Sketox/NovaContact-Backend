@@ -21,7 +21,7 @@ export class UserService {
 
         console.log('Usuario creado exitosamente');
     }
-
+    
     /**
      * Obtener todos los usuarios.
      * @returns Lista de usuarios en la base de datos.
