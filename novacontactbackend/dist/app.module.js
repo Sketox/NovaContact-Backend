@@ -15,6 +15,8 @@ const user_module_1 = require("./user/user.module");
 const room_service_1 = require("./room/service/room.service");
 const room_module_1 = require("./room/room.module");
 const upload_module_1 = require("./upload/upload.module");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -22,7 +24,9 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, room_service_1.RoomService],
-        imports: [tutorial_module_1.TutorialModule, user_module_1.UserModule, room_module_1.RoomModule, upload_module_1.UploadModule],
+        imports: [tutorial_module_1.TutorialModule, user_module_1.UserModule, room_module_1.RoomModule, upload_module_1.UploadModule, serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..', 'uploads'),
+            })]
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
