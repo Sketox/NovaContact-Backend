@@ -15,7 +15,7 @@ async function bootstrap() {
   app.enableCors({
     origin: 'http://localhost:3001',
     methods: 'GET,POST,PUT,DELETE,PATCH,HEAD',
-    credentials: true
+    credentials: true,
   });
 
   // Habilitar validaciones automáticas
@@ -26,7 +26,7 @@ async function bootstrap() {
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
 
   await app.listen(3000);
-  console.log(`🚀 Servidor corriendo en: http://localhost:3000/api`);
+  console.log('🚀 Servidor corriendo en: http://localhost:3000/api');
 }
 
 bootstrap();

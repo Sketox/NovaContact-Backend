@@ -12,13 +12,13 @@ async function bootstrap() {
     app.enableCors({
         origin: 'http://localhost:3001',
         methods: 'GET,POST,PUT,DELETE,PATCH,HEAD',
-        credentials: true
+        credentials: true,
     });
     app.useGlobalPipes(new common_1.ValidationPipe());
     const upload = multer({ dest: 'uploads/' });
     app.use('/uploads', express.static((0, path_1.join)(__dirname, '..', 'uploads')));
     await app.listen(3000);
-    console.log(`🚀 Servidor corriendo en: http://localhost:3000/api`);
+    console.log('🚀 Servidor corriendo en: http://localhost:3000/api');
 }
 bootstrap();
 //# sourceMappingURL=main.js.map
